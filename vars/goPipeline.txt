@@ -1,0 +1,20 @@
+<h1>goPipeline</h1>
+
+<p>
+    This is the Standard Go Pipeline.
+    More information here:
+    <a href="https://p-bitbucket.nl.eu.abnamro.com:7999/projects/STPL/repos/stpl-pipeline-go/browse/docs">https://p-bitbucket.nl.eu.abnamro.com:7999/projects/STPL/repos/stpl-pipeline-go/browse/docs</a>
+</p>
+
+<h2>How to use</h2>
+
+<p>
+    Below is an example how you can use the change dsl method from a Jenkins pipeline.
+</p>
+
+<p>
+    <pre>
+    @Library(['stpl-pipeline-go']) _
+    androidPipeline()
+    <pre>
+</p>
