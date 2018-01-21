@@ -2,44 +2,44 @@ import com.privatesquare.pipeline.go.Go
 import com.privatesquare.pipeline.utils.Git
 
 def call() {
-    node("linux") {
-
-        Git git
-        Go go
+    node() {
+        def go = new Go(this)
+        def git = new Git(this)
         String nexusRepositoryId
-        String builderCredentials
+        String scmCredentialsId, nexusCredentialsId
         String version, scmType, zipFile
         def jenkinsProperties
 
-        final String propsFileName = 'jenkins.properties'
+        final String propsFileName = 'jenkins.yml'
 
         stage('checkout'){
             checkout scm
             scmType = getScmType(scm)
-            println "SCM Type: ${scmType}"
+            println "[INFO] SCM type : ${scmType}"
         }
 
         stage('prepare') {
 
             timeout(time: 10, unit: 'SECONDS') {
-                jenkinsProperties = readProperties file: propsFileName
+                jenkinsProperties = readYaml file: propsFileName
             }
 
-            builderCredentials = "builder"
-            nexusRepositoryId = "ATS-releases"
+            scmCredentialsId = "bitbucket"
+            nexusCredentialsId = "builder"
+            nexusRepositoryId = "Go-releases"
 
             // generate version
-            assert jenkinsProperties.version : 'Please add "version" to your jenkins.properties file'
+            assert jenkinsProperties.version : 'Please add paramter "version" to your jenkins.yml file'
             String currentVersion = String.valueOf(jenkinsProperties.version)
 
-            version = git.createNextTagVersion(currentVersion, builderCredentials)
+            version = git.createNextTagVersion(currentVersion)
         }
 
         stage('build') {
-            def goTool = tool name: 'Go 1.8.1', type: 'go'
+            def goTool = tool name: 'go-1.9.2', type: 'go'
             String goPath = env.WORKSPACE
 
-            println "GOPATH: $goPath"
+            println "[INFO] GOPATH : $goPath"
 
             String outputFolder = "${env.WORKSPACE}/bin"
             sh "mkdir -p ${outputFolder}"
@@ -84,9 +84,9 @@ def call() {
         }
 
         stage('tag') {
-            git.createNextTag(String.valueOf(jenkinsProperties.version), builderCredentials, utilities)
+            git.createNextTag(String.valueOf(jenkinsProperties.version), scmCredentialsId)
         }
-
+/*
         stage('publish') {
             NexusArtifact artifact = new NexusArtifact()
             artifact.artifactId = jenkinsProperties.artifactId
@@ -104,7 +104,7 @@ def call() {
                     artifact,
                     builderCredentials)
         }
-
+*/
         stage('cleanup') {
             step([$class: 'WsCleanup'])
         }
