@@ -14,7 +14,7 @@ class Git implements Serializable {
     String getUrl() {
         String gitUrl
         steps.sh 'git ls-remote --get-url origin > GIT_URL'
-        gitUrl = readFile('GIT_URL').trim()
+        gitUrl = steps.readFile('GIT_URL').trim()
         return gitUrl
     }
 
