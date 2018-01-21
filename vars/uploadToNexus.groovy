@@ -1,12 +1,10 @@
 
-def call(final String nexusUrl,
-         final String repositoryId,
-         final String groupId,
-         final String version,
-         NexusArtifact[] artifacts,
-         final String credentialsId,
-         final String nexusVersion = 'nexus2',
-         final String nexusProtocol = 'https') {
+def call(final String repositoryId, final String groupId, final String artifactId,
+         final String version, final String packaging, final Static filePath) {
 
-    uploadArtifacts(nexusUrl, repositoryId, groupId, version,artifacts, credentialsId, nexusVersion, nexusProtocol)
+    nexusPublisher nexusInstanceId: 'privatesquare-nexus',
+            nexusRepositoryId: "repositoryId",
+            packages: [[$class: 'MavenPackage',
+                        mavenAssetList: [[classifier: '', extension: '', filePath: "filePath"]],
+                        mavenCoordinate: [artifactId: "artifactId", groupId: "groupId", packaging: "packaging", version: "version"]]]
 }

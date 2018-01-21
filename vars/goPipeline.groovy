@@ -88,25 +88,21 @@ def call() {
         stage('tag') {
             git.createNextTag(String.valueOf(jenkinsProperties.version), scmCredentialsId)
         }
-/*
+
         stage('publish') {
-            NexusArtifact artifact = new NexusArtifact()
-            artifact.artifactId = jenkinsProperties.artifactId
-            artifact.classifier = ''
-            artifact.file = zipFile
-            artifact.type = 'zip'
-
+            String artifactId = jenkinsProperties.artifactId
             String groupId = jenkinsProperties.groupId
+            String packaging = "zip"
 
-            nexus.uploadArtifact(
-                    nexusUrl,
+            uploadToNexus(
                     nexusRepositoryId,
                     groupId,
+                    artifactId,
                     version,
-                    artifact,
-                    builderCredentials)
+                    packaging,
+                    zipFile)
         }
-*/
+
         stage('cleanup') {
             step([$class: 'WsCleanup'])
         }
