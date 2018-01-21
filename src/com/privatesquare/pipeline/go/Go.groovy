@@ -25,7 +25,7 @@ class Go implements Serializable {
         steps.withEnv(["GOROOT=${goTool}", "PATH=${steps.PATH};${goTool}/bin", "GOPATH=${goPath}"]) {
             steps.dir(goPath) {
                 steps.withEnv(["GOOS=$OS", "GOARCH=$architecture"]) {
-                    steps.sh "go build -o $output $fullPackageName"
+                    steps.sh "${goTool}/bin/go build -o $output $fullPackageName"
                 }
             }
         }
