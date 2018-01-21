@@ -18,6 +18,11 @@ class Git implements Serializable {
         return gitUrl
     }
 
+    void setGitConfig(){
+        shell("git config user.name [this]")
+        shell("git config user.email [this]")
+    }
+
     String shellWithResponse(String command){
         String response
         steps.sh "${command} > output"
@@ -34,6 +39,7 @@ class Git implements Serializable {
      * (e.g. if version is 1.2 and no tags exists: v1.2.0, if 1.2.2 exists, we get: v1.2.3)
      */
     String createNextTag(String currentVersion, String builderCredentialsId) {
+        setGitConfig()
         String newVersion = createNextTagVersion(currentVersion)
         String newTag = "v${newVersion}"
         createTag(newTag)
@@ -105,9 +111,6 @@ class Git implements Serializable {
      * Push the given tag to the current remote used.
      */
     void pushTagToRepo(String tagName, String credentialsId) {
-
-        shell("git config user.name [this]")
-        shell("git config user.email [this]")
 
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: credentialsId, passwordVariable: 'pss', usernameVariable: 'usr']]) {
             String repo = originRepo.replace('https://', " https://${steps.env.usr}:${steps.env.pss}@")
