@@ -20,37 +20,13 @@ class Git implements Serializable {
 
     String shellWithResponse(String command){
         String response
-        sh "${command} > output"
-        response = readFile('output').trim()
+        steps.sh "${command} > output"
+        response = steps.readFile('output').trim()
         return response
     }
 
-    /**
-     * Create a tag with the provided tagName.
-     * @param tagName the name for the tag
-     */
-    void createTag(String tagName) {
-        assert tagName: 'tagName is a required paramter for creating a tag'
-        def createTagCommand = "git tag -a ${tagName} -m \"Jenkins created version ${tagName}\""
-        sh createTagCommand
-    }
-
-    String retrieveGitTagsForVersion(String versionMask) {
-        String command = "git tag -l \"${versionMask}\""
-        return shellWithResponse(command)
-    }
-
-    /**
-     * Create the next Tag version.
-     * Based on the current version and the tags currently in Git, derived the new incremental semantic version.
-     * Where the increment will be on the patch segment.
-     *
-     (e.g. if version is 1.2 and no tags exists: 1.2.0, if 1.2.2 exists, we get: 1.2.3)
-     */
-    String createNextTagVersion(String currentVersion, String builderCredentialsId) {
-        def gitTags = retrieveGitTagsForVersion("v${currentVersion}.*")
-        def tagsArray = gitTags.split('\n')
-        return getNewVersion(tagsArray, currentVersion)
+    void shell(String command){
+        steps.sh "${command}"
     }
 
     /**
@@ -64,6 +40,34 @@ class Git implements Serializable {
         createTag(newTag)
         pushTagToRepo(newTag, builderCredentialsId)
         return newTag
+    }
+
+    /**
+     * Create a tag with the provided tagName.
+     * @param tagName the name for the tag
+     */
+    void createTag(String tagName) {
+        assert tagName: 'tagName is a required paramter for creating a tag'
+        def createTagCommand = "git tag -a ${tagName} -m \"Jenkins created version ${tagName}\""
+        shell(createTagCommand)
+    }
+
+    /**
+     * Create the next Tag version.
+     * Based on the current version and the tags currently in Git, derived the new incremental semantic version.
+     * Where the increment will be on the patch segment.
+     *
+     (e.g. if version is 1.2 and no tags exists: 1.2.0, if 1.2.2 exists, we get: 1.2.3)
+     */
+    String createNextTagVersion(String currentVersion) {
+        def gitTags = retrieveGitTagsForVersion("v${currentVersion}.*")
+        def tagsArray = gitTags.split('\n')
+        return getNewVersion(tagsArray, currentVersion)
+    }
+
+    String retrieveGitTagsForVersion(String versionMask) {
+        String command = "git tag -l \"${versionMask}\""
+        return shellWithResponse(command)
     }
 
     String getNewVersion(def listOfExistingVersions, String currentVersion) {
