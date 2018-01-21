@@ -5,12 +5,15 @@ package com.privatesquare.pipeline.utils
  */
 class Git implements Serializable {
 
+    def steps
+    Git(steps) {this.steps = steps}
+
     /**
      * retrieve git repo URL.
      */
     String getUrl() {
         String gitUrl
-        sh 'git ls-remote --get-url origin > GIT_URL'
+        steps.sh 'git ls-remote --get-url origin > GIT_URL'
         gitUrl = readFile('GIT_URL').trim()
         return gitUrl
     }
