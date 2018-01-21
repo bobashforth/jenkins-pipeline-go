@@ -2,8 +2,7 @@ package com.privatesquare.pipeline.go
 
 
 class Go implements Serializable {
-
-    String goTool
+    
     def steps
     Go(steps) {this.steps = steps}
 
@@ -19,7 +18,7 @@ class Go implements Serializable {
     /**
      * Build Go code
      */
-    void build(final String goPath, final String OS, final String architecture, final String output, final String groupId, final String artifactId) {
+    void build(final String goTool, final String goPath, final String OS, final String architecture, final String output, final String groupId, final String artifactId) {
         String fullPackageName = getFullPackageName(groupId, artifactId)
         steps.withEnv(["GOROOT=${goTool}", "PATH=${steps.PATH};${goTool}/bin", "GOPATH=${goPath}"]) {
             steps.dir(goPath) {

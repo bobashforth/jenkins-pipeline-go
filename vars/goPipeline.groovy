@@ -73,7 +73,7 @@ def call() {
 
             for(output in outputs) {
                 String file = "${outputFolder}/${jenkinsProperties.artifactId}${output.postfix}"
-                go.build(goPath, output.OS, output.architecture, file, jenkinsProperties.groupId, jenkinsProperties.artifactId)
+                go.build(goTool, goPath, output.OS, output.architecture, file, jenkinsProperties.groupId, jenkinsProperties.artifactId)
             }
             zipFile = "${jenkinsProperties.artifactId}.zip"
             if(fileExists(zipFile)) {
