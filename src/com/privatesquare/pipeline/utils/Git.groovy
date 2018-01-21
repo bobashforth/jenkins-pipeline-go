@@ -105,22 +105,17 @@ class Git implements Serializable {
      * Push the given tag to the current remote used.
      */
     void pushTagToRepo(String tagName, String credentialsId) {
-        assert tagName: 'I need tagName to be valid'
-        assert credentialsId: 'I need credentialsId to be valid'
 
-        /*
-         * example:
-         * from: https://p-bitbucket.nl.eu.abnamro.com:7999/scm/~c29874/pipeline-from-scm-tests.git
-         * to: https://{user}:{pass}@p-bitbucket.nl.eu.abnamro.com:7999/scm/~c29874/pipeline-from-scm-tests.git
-         *
-        */
+        shell("git config user.name [this]")
+        shell("git config user.email [this]")
+
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: credentialsId, passwordVariable: 'pss', usernameVariable: 'usr']]) {
             String repo = originRepo.replace('https://', " https://${steps.env.usr}:${steps.env.pss}@")
-            def gitAddRemoteCommand = "\"${git}\" remote add bbTags ${repo}"
-            def gitPushCommand = "\"${git}\" push bbTags ${tagName}"
+            def gitAddRemoteCommand = "git remote add bbTags ${repo}"
+            def gitPushCommand = "git push bbTags ${tagName}"
 
-            sh gitAddRemoteCommand
-            sh gitPushCommand
+            shell(gitAddRemoteCommand)
+            shell(gitPushCommand)
         }
     }
 }
