@@ -12,6 +12,8 @@ def call() {
 
         final String propsFileName = 'jenkins.yml'
 
+        step([$class: 'WsCleanup'])
+
         stage('checkout'){
             checkout scm
             scmType = getScmType(scm)
