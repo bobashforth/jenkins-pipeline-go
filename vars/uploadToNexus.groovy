@@ -5,6 +5,6 @@ def call(final String repositoryId, final String groupId, final String artifactI
     nexusPublisher nexusInstanceId: 'privatesquare-nexus',
             nexusRepositoryId: "repositoryId",
             packages: [[$class: 'MavenPackage',
-                        mavenAssetList: [[classifier: '', extension: '', filePath: "filePath"]],
+                        mavenAssetList: [[classifier: '', extension: '', filePath: "./filePath"]],
                         mavenCoordinate: [artifactId: "artifactId", groupId: "groupId", packaging: "packaging", version: "version"]]]
 }

@@ -104,7 +104,7 @@ def call() {
         }
 
         stage('cleanup') {
-            step([$class: 'WsCleanup'])
+            //step([$class: 'WsCleanup'])
         }
     }
 }
