@@ -34,9 +34,8 @@ class Git implements Serializable {
      * (e.g. if version is 1.2 and no tags exists: v1.2.0, if 1.2.2 exists, we get: v1.2.3)
      */
     String createNextTag(String currentVersion, String builderCredentialsId) {
-        String newVersion = createNextTagVersion(currentVersion, builderCredentialsId)
+        String newVersion = createNextTagVersion(currentVersion)
         String newTag = "v${newVersion}"
-
         createTag(newTag)
         pushTagToRepo(newTag, builderCredentialsId)
         return newTag
@@ -71,8 +70,8 @@ class Git implements Serializable {
     }
 
     String getNewVersion(def listOfExistingVersions, String currentVersion) {
-        assert listOfExistingVersions: "We need listOfExistingVersions to be valid"
-        assert currentVersion: "We need currentVersion to be valid"
+        assert listOfExistingVersions: "listOfExistingVersions is a required parameter to get a new version"
+        assert currentVersion: "currentVersion is a required parameter to get a new version"
 
         List<Integer> filteredVersions = new ArrayList<Integer>();
         for (int i =0; i < listOfExistingVersions.size(); i++) {
@@ -123,10 +122,5 @@ class Git implements Serializable {
             sh gitAddRemoteCommand
             sh gitPushCommand
         }
-    }
-
-    String getGitOriginRemote() {
-        def gitCommand = "\"${git}\" config --get remote.origin.url"
-        return shellWithResponse(gitCommand)
     }
 }

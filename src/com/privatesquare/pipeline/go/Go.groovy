@@ -4,18 +4,16 @@ package com.privatesquare.pipeline.go
 class Go implements Serializable {
 
     String goTool
+    def steps
+    Go(steps) {this.steps = steps}
 
     /**
      * Creates a package name for usage with Go
      */
     String getFullPackageName(final String groupId, final String artifactId) {
-        String seperator = '\\'
-        if(steps.isUnix()) {
-            seperator = '/'
-        }
-        String path = groupId.replace('.', seperator)
-
-        return path + seperator + artifactId
+        String separator = '/'
+        String path = groupId.replace('.', separator)
+        return path + separator + artifactId
     }
 
     /**

@@ -46,11 +46,15 @@ def call() {
 
             def outputs = [[
                                    OS: 'darwin',
-                                   architecture: '386',
+                                   architecture: 'amd64',
+                                   postfix: '-darwin'
+                           ], [
+                                   OS: 'darwin',
+                                   architecture: 'amd64',
                                    postfix: '-darwin-x86'
                            ], [
                                    OS: 'windows',
-                                   architecture: 'amd64',
+                                   architecture: '386',
                                    postfix: '.exe'
                            ], [
                                    OS: 'windows',
