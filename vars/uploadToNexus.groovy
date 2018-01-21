@@ -1,6 +1,6 @@
 
 def call(final String repositoryId, final String groupId, final String artifactId,
-         final String version, final String packaging, final Static filePath) {
+         final String version, final String packaging, final String filePath) {
 
     nexusPublisher nexusInstanceId: 'privatesquare-nexus',
             nexusRepositoryId: "repositoryId",
