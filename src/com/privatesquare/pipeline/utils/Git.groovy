@@ -113,6 +113,7 @@ class Git implements Serializable {
     void pushTagToRepo(String tagName, String credentialsId) {
 
         steps.withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: credentialsId, passwordVariable: 'pss', usernameVariable: 'usr']]) {
+            String originRepo = getUrl()
             String repo = originRepo.replace('https://', " https://${steps.env.usr}:${steps.env.pss}@")
             def gitAddRemoteCommand = "git remote add bbTags ${repo}"
             def gitPushCommand = "git push bbTags ${tagName}"
