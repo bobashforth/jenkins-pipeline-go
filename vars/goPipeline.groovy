@@ -52,11 +52,11 @@ def call() {
                                    postfix: '-darwin'
                            ], [
                                    OS: 'darwin',
-                                   architecture: 'amd64',
+                                   architecture: '386',
                                    postfix: '-darwin-x86'
                            ], [
                                    OS: 'windows',
-                                   architecture: '386',
+                                   architecture: 'amd64',
                                    postfix: '.exe'
                            ], [
                                    OS: 'windows',
@@ -103,8 +103,6 @@ def call() {
                     zipFile)
         }
 
-        stage('cleanup') {
-            //step([$class: 'WsCleanup'])
-        }
+        step([$class: 'WsCleanup'])
     }
 }
