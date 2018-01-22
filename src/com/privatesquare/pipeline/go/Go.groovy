@@ -36,7 +36,7 @@ class Go implements Serializable {
      */
     void gometalinter(final String goTool, final String gometalinter){
         steps.withEnv(["PATH+GO=${goTool}/bin:${gometalinter}"]) {
-            steps.sh "gometalinter.v1 --checkstyle ./... > gometalinter-report.xml"
+            steps.sh "gometalinter.v1 --checkstyle ./... > report.xml"
         }
     }
 }
