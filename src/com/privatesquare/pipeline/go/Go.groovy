@@ -22,10 +22,10 @@ class Go implements Serializable {
         String fullPackageName = getFullPackageName(groupId, artifactId)
         steps.println "[INFO] OS : ${OS}"
         steps.println "[INFO] Architecture : ${architecture}"
-        steps.withEnv(["GOROOT=${goTool}", "GOPATH=${goPath}"]) {
+        steps.withEnv(["GOROOT=${goTool}", "PATH+GO=${goTool}/bin", "GOPATH=${goPath}"]) {
             steps.dir(goPath) {
                 steps.withEnv(["GOOS=$OS", "GOARCH=$architecture"]) {
-                    steps.sh "${goTool}/bin/go build -o $output $fullPackageName"
+                    steps.sh "go build -o $output $fullPackageName"
                 }
             }
         }
