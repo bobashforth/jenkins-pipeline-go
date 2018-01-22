@@ -89,7 +89,9 @@ def call() {
 
         stage('gometalinter') {
             gometalinter = tool name: 'gometalinter', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-            go.gometalinter(goTool, gometalinter)
+            withEnv(["PATH+GO=${goTool}/bin:${gometalinter}"]) {
+                sh "gometalinter.v1 --checkstyle ./... > report.xml"
+            }
         }
 
         stage('tag') {
