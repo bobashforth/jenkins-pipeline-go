@@ -30,4 +30,17 @@ class Go implements Serializable {
             }
         }
     }
+
+    /**
+     * Gometalinter
+     */
+    void gometalinter(final String goTool, final String gometalinter){
+        steps.withEnv(["PATH+GO=${goTool}/bin:${gometalinter}"]) {
+            try{
+                steps.sh "gometalinter.v1 --checkstyle ./... > report.xml"
+            }catch(err){
+                steps.print "Known error with gometalinter process prevented"
+            }
+        }
+    }
 }
