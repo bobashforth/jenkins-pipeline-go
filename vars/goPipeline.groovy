@@ -9,6 +9,8 @@ def call() {
         String scmCredentialsId, nexusCredentialsId
         String version, scmType, zipFile
         def jenkinsProperties
+        def goTool
+        def gometalinter
 
         final String propsFileName = 'jenkins.yml'
 
@@ -38,7 +40,7 @@ def call() {
         }
 
         stage('build') {
-            def goTool = tool name: 'go-1.9.2', type: 'go'
+            goTool = tool name: 'go-1.9.2', type: 'go'
             String goPath = env.WORKSPACE
 
             println "[INFO] GOPATH : $goPath"
@@ -83,6 +85,11 @@ def call() {
             }
 
             zip dir: outputFolder, zipFile: zipFile
+        }
+
+        stage('gometalinter') {
+            gometalinter = tool name: 'gometalinter', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
+            go.gometalinter(goTool, gometalinter)
         }
 
         stage('tag') {
