@@ -14,6 +14,9 @@ def call() {
 
         final String propsFileName = 'jenkins.yml'
 
+        String artifactId = jenkinsProperties.artifactId
+        String groupId = jenkinsProperties.groupId
+
         step([$class: 'WsCleanup'])
 
         stage('checkout'){
@@ -96,9 +99,20 @@ def call() {
             git.createNextTag(String.valueOf(jenkinsProperties.version), scmCredentialsId)
         }
 
+        stage('sonarqube') {
+            def sonarScanner = tool name: 'sonar-scanner-3.0.3', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            withEnv(["PATH+SONAR=${sonarScanner}/bin"]) {
+                sh "sonar-scanner
+                        sonar.sources=./
+                        -Dsonar.golint.reportPath=report.xml 
+                        -Dsonar.projectName=${artifactId} 
+                        -Dsonar.projectKey=${groupId}.${artifactId}
+                        -Dsonar.projectVersion=${version}
+                        -Dsonar.links.ci=${BUILD_URL}"
+            }
+        }
+
         stage('publish') {
-            String artifactId = jenkinsProperties.artifactId
-            String groupId = jenkinsProperties.groupId
             String packaging = "zip"
 
             uploadToNexus(
