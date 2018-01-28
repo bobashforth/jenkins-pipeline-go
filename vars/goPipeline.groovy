@@ -102,7 +102,7 @@ def call() {
             withEnv(["PATH+SONAR=${sonarScanner}/bin"]) {
                 withSonarQubeEnv {
                     sh "sonar-scanner \
-                        sonar.sources=./ \
+                        -Dsonar.sources=./ \
                         -Dsonar.golint.reportPath=report.xml \
                         -Dsonar.projectName=${artifactId} \
                         -Dsonar.projectKey=${groupId}.${artifactId} \
