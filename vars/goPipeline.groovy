@@ -102,12 +102,12 @@ def call() {
         stage('sonarqube') {
             def sonarScanner = tool name: 'sonar-scanner-3.0.3', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
             withEnv(["PATH+SONAR=${sonarScanner}/bin"]) {
-                sh "sonar-scanner
-                        sonar.sources=./
-                        -Dsonar.golint.reportPath=report.xml 
-                        -Dsonar.projectName=${artifactId} 
-                        -Dsonar.projectKey=${groupId}.${artifactId}
-                        -Dsonar.projectVersion=${version}
+                sh "sonar-scanner \
+                        sonar.sources=./ \
+                        -Dsonar.golint.reportPath=report.xml \
+                        -Dsonar.projectName=${artifactId} \
+                        -Dsonar.projectKey=${groupId}.${artifactId} \
+                        -Dsonar.projectVersion=${version} \
                         -Dsonar.links.ci=${BUILD_URL}"
             }
         }
