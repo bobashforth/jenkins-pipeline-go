@@ -7,15 +7,12 @@ def call() {
         def git = new Git(this)
         String nexusRepositoryId
         String scmCredentialsId, nexusCredentialsId
-        String version, scmType, zipFile
+        String artifactId, groupId, version, scmType, zipFile
         def jenkinsProperties
         def goTool
         def gometalinter
 
         final String propsFileName = 'jenkins.yml'
-
-        String artifactId = jenkinsProperties.artifactId
-        String groupId = jenkinsProperties.groupId
 
         step([$class: 'WsCleanup'])
 
@@ -38,7 +35,8 @@ def call() {
             // generate version
             assert jenkinsProperties.version : 'Please add paramter "version" to your jenkins.yml file'
             String currentVersion = String.valueOf(jenkinsProperties.version)
-
+            artifactId = jenkinsProperties.artifactId
+            groupId = jenkinsProperties.groupId
             version = git.createNextTagVersion(currentVersion)
         }
 
