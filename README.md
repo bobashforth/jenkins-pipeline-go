@@ -1,25 +1,32 @@
 # Go pipeline
 
+## Configure Shared library
+
+![adding-shared-libraries](./docs/images/adding-shared-libraries-jenkins.png)
+
 ## Usage
 
+Add below line in your JenkinsFile to invoke the shared library
+
 ```Jenkinsfile
-@Library(['stpl-pipeline-go', 'stpl-pipeline-core']) _
+@Library(['jenkins-pipeline-go']) _
 goPipeline()
 ```
 
-And add a jenkins.properties-file (description in [Configuration](#Configuration))
+And add a jenkins.yml-file (description in [Configuration](#Configuration))
 
 ## Project setup
 
-We assume that if your groupId is ```com.abnamro.myDepartment``` and your artificatId is ```myApplication```, then your application can be found in the folder ```src/com/abnamro/myDepartment/myApplcation``` (relative to the rootfolder of your git-project). 
+We assume that if your groupId is ```com.privatesquare.go``` and your artificatId is ```myApplication```, then your application can be found in the folder ```src/com/privatesquare/go/myApplcation``` (relative to the rootfolder of your git-project).
 
 ## Configuration <a name="Configuration"></a>
 
 |name|required|description|example
 |---|---|---|---|
-|groupId|yes|full qualified domain name of your project|com.abnamro.stpl.support
-|artifactId|yes|name of your application|hockeyapp
+|groupId|yes|full qualified domain name of your project|com.privatesquare.go
+|artifactId|yes|name of your application|jenkins-ci
 |version|yes|major.minor.increment|1.0.0
-|systemLetterCode|yes|3- or 4-letter acronym for your project|STPL
 
-Example: [jenkins.properties](jenkins.properties)
+Example: [jenkins.yml](./docs/jenkins.yml)
+
+[Reference](https://jenkins.io/doc/book/pipeline/shared-libraries/)
