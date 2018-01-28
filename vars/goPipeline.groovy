@@ -7,7 +7,7 @@ def call() {
         def git = new Git(this)
         String nexusRepositoryId
         String scmCredentialsId, nexusCredentialsId
-        String artifactId, groupId, version, scmType, zipFile
+        String artifactId, groupId, version, scmUrl, scmType, zipFile
         def jenkinsProperties
         def goTool
         def gometalinter
@@ -19,7 +19,9 @@ def call() {
         stage('checkout'){
             checkout scm
             scmType = getScmType(scm)
+            scmUrl = scm.getUserRemoteConfigs()[0].getUrl()
             println "[INFO] SCM type : ${scmType}"
+            println "[INFO] SCM Url : ${scmUrl}"
         }
 
         stage('prepare') {
@@ -107,6 +109,7 @@ def call() {
                         -Dsonar.projectName=${artifactId} \
                         -Dsonar.projectKey=${groupId}.${artifactId} \
                         -Dsonar.projectVersion=${version} \
+                        -Dsonar.links.scm=${scmUrl} \
                         -Dsonar.links.ci=${BUILD_URL}"
                 }
             }
